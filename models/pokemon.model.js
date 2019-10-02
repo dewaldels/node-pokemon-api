@@ -99,7 +99,7 @@ class Pokemon {
         }
 
         try {
-            const result = await db.pool.query('UPDATE pokemom SET active = 0 WHERE id = $1', [id]);
+            const result = await db.pool.query('UPDATE pokemon SET active = $1 WHERE id = $2', [0, id]);
             if (result.rowCount <= 0) {
                 throw new Error('Could not remove the pokemon or it has already been deleted.');
             } else {
