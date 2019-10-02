@@ -6,7 +6,7 @@ class Pokemon {
     async get() {
         const apiResp = new ApiResponse();
         try {
-            const result = await db.pool.query('SELECT * FROM pokemon');
+            const result = await db.pool.query('SELECT * FROM pokemon WHERE active = $1', [1]);
             apiResp.data = result.rows || [];
         } catch (e) {
             apiResp.status = 500;
