@@ -1,5 +1,5 @@
 const ApiResponse = require('./api-response.model');
-const { db } = require('./db.model');
+const {db} = require('./db.model');
 
 class Pokemon {
 
@@ -8,8 +8,7 @@ class Pokemon {
         try {
             const result = await db.pool.query('SELECT * FROM pokemon');
             apiResp.data = result.rows || [];
-        }
-        catch (e) {
+        } catch (e) {
             apiResp.status = 500;
             apiResp.error = e.message;
         }
@@ -27,13 +26,13 @@ class Pokemon {
         }
 
         // Dynamically build $1, $2, $3, $4 based on the number of properties in the pokemon object.
-        const placeholders = Object.keys(pokemon).map((key, i) => `$${i+1}`).join(',');
+        const placeholders = Object.keys(pokemon).map((key, i) => `$${i + 1}`).join(',');
         // Use the pokemon keys to generate the column names of the table. 
         const columnNames = Object.keys(pokemon).join(',');
-        
+
         // Be careful not to add any properties to the pokemon object in the request that are NOT column names of the table.
         const query = `INSERT INTO pokemon (${columnNames}) VALUES (${placeholders}) RETURNING id;`;
-            
+
         const insertQuery = {
             text: query,
             values: Object.values(pokemon)
@@ -45,28 +44,42 @@ class Pokemon {
                 ...pokemon,
                 id: result.rows[0].id
             } || null;
-        }
-        catch (e) {
+        } catch (e) {
             console.error(e);
             apiResp.status = 500;
             apiResp.error = e.message;
         }
-        
+
         return apiResp;
 
     }
 
-    update(pokemon) {
+    async update(pokemon) {
 
         const apiResp = new ApiResponse();
 
-        const insert = 'UPDATE pokemon SET ' + Object.keys(pokemon).map((key, index) => {
-            return `${key} = $${i+1}`
-        }).join(',') + ' WHERE id = $' + (pokemon.length + 1);
+        if (pokemon === null || typeof pokemon == 'undefined') {
+            apiResp.status = 400;
+            apiResp.error = "Please add a pokemon!";
+            return apiResp;
+        }
 
-        console.log(insert);
 
-        apiResp.data = insert;
+        try {
+
+            const insert = 'UPDATE pokemon SET ' + Object.keys(pokemon).map((key, i) => {
+                return `${key} = $${i + 1}`
+            }).join(',') + ' WHERE id = $' + (Object.keys(pokemon).length + 1);
+
+            const result = await db.pool.query(insert, [...Object.values(pokemon), pokemon.id]);
+            if (result.rowCount <= 0) {
+                apiResp.success = true;
+            }
+        } catch (e) {
+            apiResp.status = 500;
+            apiResp.error = e.message;
+        }
+
         return apiResp;
     }
 
