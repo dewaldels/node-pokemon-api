@@ -14,5 +14,5 @@ CREATE TABLE pokemon (
     sp_def INTEGER,
     speed INTEGER,
     total INTEGER,
-    active INTEGER
+    active INTEGER DEFAULT 1
 );

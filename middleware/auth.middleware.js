@@ -11,7 +11,6 @@ async function authMiddleware(req, res, next) {
         return;
     }
 
-
     // Extract the Authorization Header
     const { authorization } = req.headers;
     const token = !authorization ? false :  authorization.split(' ')[1];
