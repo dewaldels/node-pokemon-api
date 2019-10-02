@@ -44,6 +44,7 @@ class Pokemon {
                 ...pokemon,
                 id: result.rows[0].id
             } || null;
+            apiResp.status = 201;
         } catch (e) {
             console.error(e);
             apiResp.status = 500;
@@ -88,8 +89,30 @@ class Pokemon {
         return apiResp;
     }
 
-    delete() {
+    async delete(id) {
+        const apiResp = new ApiResponse();
 
+        if (!id) {
+            apiResp.status = 400;
+            apiResp.error = 'You have not provided the id of the pokemon you want to remove.';
+            return apiResp;
+        }
+
+        try {
+            const result = await db.pool.query('UPDATE pokemom SET active = 0 WHERE id = $1', [id]);
+            if (result.rowCount <= 0) {
+                throw new Error('Could not remove the pokemon or it has already been deleted.');
+            } else {
+                apiResp.success = true;
+                apiResp.data = 'Successfully removed Pokemon.';
+            }
+        }
+        catch (e) {
+            apiResp.error = e.message;
+            apiResp.status = 500;
+        }
+
+        return  apiResp;
     }
 
 }

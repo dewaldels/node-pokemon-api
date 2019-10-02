@@ -25,7 +25,9 @@ router.put('/pokemon/update', async (req, res)=>{
 
 // Delete a pokemon
 router.delete('/pokemon/delete/:id', async (req, res)=>{
-    res.send('Delete a Pokemon.').end();
+    const id = req.params.id || null;
+    const apiResp = await pokemon.delete(id);
+    res.status(apiResp.status).json(apiResp).end();
 });
 
 
