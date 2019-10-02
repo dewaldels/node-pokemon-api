@@ -64,6 +64,11 @@ class Pokemon {
             return apiResp;
         }
 
+        if (!pokemon.id) {
+            apiResp.status = 400;
+            apiResp.error = "Please ensure you add the id of the pokemon!";
+            return apiResp;
+        }
 
         try {
 
