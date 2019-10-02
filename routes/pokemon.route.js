@@ -17,12 +17,14 @@ router.post('/pokemon/add', async (req, res)=>{
 });
 
 // Update a pokemon
-router.put('/pokemon/update', (req, res)=>{
-    res.send('Update a Pokemon.').end();
+router.put('/pokemon/update', async (req, res)=>{
+    const { updatedPokemon } = req.body || null;
+    const apiResp = await pokemon.update(updatedPokemon);
+    res.status(apiResp.status).json(apiResp).end();
 });
 
 // Delete a pokemon
-router.delete('/pokemon/delete', (req, res)=>{
+router.delete('/pokemon/delete/:id', async (req, res)=>{
     res.send('Delete a Pokemon.').end();
 });
 

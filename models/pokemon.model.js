@@ -20,7 +20,7 @@ class Pokemon {
 
         const apiResp = new ApiResponse();
 
-        if (pokemon === null) {
+        if (pokemon === null || typeof pokemon == 'undefined') {
             apiResp.status = 400;
             apiResp.error = "Please add a pokemon!";
             return apiResp;
@@ -56,15 +56,18 @@ class Pokemon {
 
     }
 
-    update(id, pokemon) {
+    update(pokemon) {
+
+        const apiResp = new ApiResponse();
 
         const insert = 'UPDATE pokemon SET ' + Object.keys(pokemon).map((key, index) => {
             return `${key} = $${i+1}`
-        }).join(',');
-
+        }).join(',') + ' WHERE id = $' + (pokemon.length + 1);
 
         console.log(insert);
 
+        apiResp.data = insert;
+        return apiResp;
     }
 
     delete() {

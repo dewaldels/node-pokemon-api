@@ -1,0 +1,18 @@
+{
+  "newPokemon": {
+    "name": "Pikachu",
+    "species": "Mouse Pokémon",
+    "height": "0.4 m",
+    "weight": "6.0 kg",
+    "abilities": "Static, Lightning Rod",
+    "type": "electric",
+    "sprite":"https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png",
+    "hp":35,
+    "attack":55,
+    "defense":40,
+    "sp_atk":50,
+    "sp_def": 50,
+    "speed":90,
+    "total": 320
+  }
+}
