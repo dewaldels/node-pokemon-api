@@ -1,3 +1,7 @@
+/**
+ * Define the routes for the pokemon entity.
+ * The Pokemon model will handle all the logic for the Pokemon
+ */
 const express = require('express');
 const router = express.Router();
 
@@ -6,6 +10,12 @@ const { pokemon } = require('../models/pokemon.model');
 // Get pokemon
 router.get('/pokemon', async (req, res)=>{
     const pokemonResp = await pokemon.get();
+    res.status(pokemonResp.status).json(pokemonResp).end();
+});
+
+router.get('/pokemon/:id', async (req, res)=>{
+    const id = req.params.id || null;
+    const pokemonResp = await pokemon.getById(id);
     res.status(pokemonResp.status).json(pokemonResp).end();
 });
 
